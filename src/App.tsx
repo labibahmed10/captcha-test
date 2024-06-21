@@ -6,6 +6,9 @@ const VideoCamDefaultWidth = 640;
 const VideoCamDefaultHeight = 480;
 const CaptchaSquareBoxSize = 200;
 
+// pre defined shapes for watermarks
+const waterMarksShapes = ["triangle", "circle", "square"];
+
 interface ISquareShapePosition {
   x: number;
   y: number;
@@ -17,7 +20,21 @@ interface ICaptchaSquareBox {
   hasWaterMark: boolean;
   width: number;
   height: number;
+  waterMarkType?: string;
 }
+
+// Helper function to get a unique random index from 0 to 25
+function getUniqueRandomIndex(usedIndexes: Set<number>): number {
+  let randomIndex: number;
+  do {
+    randomIndex = Math.floor(Math.random() * 25);
+  } while (usedIndexes.has(randomIndex));
+  usedIndexes.add(randomIndex);
+  return randomIndex;
+}
+
+// Set to keep track of used indexes
+const usedIndexes = new Set<number>();
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -29,6 +46,7 @@ function App() {
   });
 
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[] | undefined>();
+  // const [randomWaterMark, setRandomWaterMark] = useState<ICaptchaSquareBox[] | undefined>();
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -48,7 +66,7 @@ function App() {
     }
     clearInterval(intervalRef.current);
 
-    const captchaMiniBoxs = [];
+    const captchaMiniBoxs: ICaptchaSquareBox[] = [];
     const rows = 5;
     const cols = 5;
 
@@ -60,6 +78,16 @@ function App() {
         width: CaptchaSquareBoxSize / rows,
         height: CaptchaSquareBoxSize / cols,
       };
+    }
+
+    const halfOfTheRandomAreaForRandomWatermarkPlace = Math.floor((rows * cols) / 2); // 12/25 box area
+
+    for (let i = 0; i < halfOfTheRandomAreaForRandomWatermarkPlace; i++) {
+      const randomIndexForWatermarkPlacement = getUniqueRandomIndex(usedIndexes);
+      const waterMarkType = waterMarksShapes[Math.floor(Math.random() * 3)]; // triangle | circle | square
+      console.log(waterMarkType);
+      captchaMiniBoxs[randomIndexForWatermarkPlacement].waterMarkType = waterMarkType;
+      captchaMiniBoxs[randomIndexForWatermarkPlacement].hasWaterMark = true;
     }
 
     setAllCaptchaSquareBoxs(captchaMiniBoxs);
@@ -106,17 +134,23 @@ function App() {
                   height: `${CaptchaSquareBoxSize}px`,
                 }}
               >
-                {allCaptchaSquareBoxs?.map((box) => {
+                {allCaptchaSquareBoxs?.map((box, i) => {
                   return (
                     <div
-                      className="p-0 m-0 border-[0.3px] bg-slate-400/20 z-10 flex items-center justify-center"
-                      key={box?.position}
+                      className={`p-0 m-0 border-[0.3px] bg-slate-400/20 z-10 flex items-center justify-center hover:${box.hasWaterMark && 'bg-[#03285D]'}`}
+                      key={i}
                       style={{
                         width: `${box?.width}px`,
                         height: `${box?.height}px`,
                       }}
                     >
-                      {box.position}
+                      {box.waterMarkType === "triangle" ? (
+                        <div className="custom-triangle" />
+                      ) : box.waterMarkType === "circle" ? (
+                        <div className="custom-circle" />
+                      ) : (
+                        box.waterMarkType === "square" && <div className="custom-square" />
+                      )}
                     </div>
                   );
                 })}

@@ -7,3 +7,17 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+@layer utilities {
+  .custom-triangle {
+    @apply border-x-[15px] border-x-transparent border-b-[30px] border-b-[#f3f3f3];
+  }
+
+  .custom-circle {
+    @apply rounded-full border-[15px];
+  }
+
+  .custom-square {
+    @apply bg-slate-50 border-[15px];
+  }
+}
