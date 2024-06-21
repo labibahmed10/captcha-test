@@ -11,6 +11,7 @@ function App() {
   const webcamRef = useRef<Webcam>(null);
   const intervalRef = useRef<number | undefined>();
   const [imgSrc, setImageSrc] = useState<string | null>(null);
+  const [shapeNameToValidate, setShapeNameToValidate] = useState<string>("");
   const [squareShapePosition, setSquareShapePosition] = useState<ISquareShapePosition>({ x: 0, y: 0 });
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[] | undefined>();
 
@@ -54,6 +55,8 @@ function App() {
       captchaMiniBoxs[randomIndexForWatermarkPlacement].hasWaterMark = true;
     }
 
+    const randomWatermarkShapeName = waterMarksShapes[Math.floor(Math.random() * 3)];
+    setShapeNameToValidate(randomWatermarkShapeName);
     setAllCaptchaSquareBoxs(captchaMiniBoxs);
   };
 
@@ -66,7 +69,7 @@ function App() {
       )}
 
       {imgSrc && (
-        <CaptchaContainer handleFunction={handlePreValidationImgPosition} title={`Select SHAPENAME`} action="Validate">
+        <CaptchaContainer handleFunction={handlePreValidationImgPosition} title={`Select ${shapeNameToValidate}`} action="Validate">
           <CaptchaSectorsValidation imgSrc={imgSrc} squareShapePosition={squareShapePosition} allCaptchaSquareBoxs={allCaptchaSquareBoxs} />
         </CaptchaContainer>
       )}
