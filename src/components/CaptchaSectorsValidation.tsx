@@ -1,7 +1,12 @@
 import { ICaptchaSectorsValidationProps } from "../types";
 import { CaptchaSquareBoxSize } from "../utils/constValues";
 
-const CaptchaSectorsValidation = ({ imgSrc, allCaptchaSquareBoxs, squareShapePosition }: ICaptchaSectorsValidationProps) => {
+const CaptchaSectorsValidation = ({
+  imgSrc,
+  allCaptchaSquareBoxs,
+  squareShapePosition,
+  handleSelectedWatermarks,
+}: ICaptchaSectorsValidationProps) => {
   return (
     <>
       {/* the image that was taken as a screenshot */}
@@ -21,13 +26,16 @@ const CaptchaSectorsValidation = ({ imgSrc, allCaptchaSquareBoxs, squareShapePos
           {allCaptchaSquareBoxs?.map((box, i) => {
             return (
               <div
-                className={`p-0 m-0 border-[0.3px] bg-slate-400/20 z-10 flex items-center justify-center 
-                 ${box.hasWaterMark ? "hover:bg-[#03285D] cursor-pointer" : ""}`}
+                className={`p-0 m-0 border-[0.3px] bg-slate-400/20 z-10 flex items-center justify-center cursor-pointer ${
+                  box.hasWaterMark ? "hover:bg-[#03285D] " : ""
+                }`}
                 key={i}
                 style={{
                   width: `${box?.width}px`,
                   height: `${box?.height}px`,
+                  backgroundColor: box.isClicked ? "#03285D" : "",
                 }}
+                onClick={() => handleSelectedWatermarks(box)}
               >
                 {box.waterMarkType === "triangle" ? (
                   <div className="custom-triangle" />

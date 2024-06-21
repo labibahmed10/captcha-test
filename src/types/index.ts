@@ -7,6 +7,7 @@ export interface ISquareShapePosition {
 }
 
 export interface ICaptchaSquareBox {
+  position: number;
   isClicked: boolean;
   hasWaterMark: boolean;
   width: number;
@@ -31,4 +32,5 @@ export interface ICaptchaSectorsValidationProps {
   imgSrc: string;
   allCaptchaSquareBoxs: ICaptchaSquareBox[] | undefined;
   squareShapePosition: ISquareShapePosition;
+  handleSelectedWatermarks: (val: ICaptchaSquareBox) => void;
 }

@@ -17,7 +17,7 @@ const CaptchaWebCamContainer = forwardRef<Webcam, ICaptchaWebCamContainerProps>(
         ref={ref} // webcam ref value attached here
       />
 
-      {(ref as RefObject<Webcam>)?.current && !allCaptchaSquareBoxs && (
+      {(ref as RefObject<Webcam>)?.current && allCaptchaSquareBoxs!.length <= 0 && (
         <div
           className="absolute border-2 border-white"
           style={{

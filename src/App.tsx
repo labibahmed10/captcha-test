@@ -13,7 +13,7 @@ function App() {
   const [imgSrc, setImageSrc] = useState<string | null>(null);
   const [shapeNameToValidate, setShapeNameToValidate] = useState<string>("");
   const [squareShapePosition, setSquareShapePosition] = useState<ISquareShapePosition>({ x: 0, y: 0 });
-  const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[] | undefined>();
+  const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[]>([]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -39,6 +39,7 @@ function App() {
 
     for (let i = 0; i < rows * cols; i++) {
       captchaMiniBoxs[i] = {
+        position: i,
         isClicked: false,
         hasWaterMark: false,
         width: CaptchaSquareBoxSize / rows,
@@ -60,6 +61,16 @@ function App() {
     setAllCaptchaSquareBoxs(captchaMiniBoxs);
   };
 
+  const handleSelectedWatermarks = (box: ICaptchaSquareBox) => {
+    const selectedWatermarks = allCaptchaSquareBoxs?.find((captchaMiniBox) => captchaMiniBox.position === box.position);
+    selectedWatermarks!.isClicked = !selectedWatermarks!.isClicked; // depending click, will toggle the isClicked flag
+    const updatedBoxes = [...allCaptchaSquareBoxs];
+    updatedBoxes[box.position] = selectedWatermarks as ICaptchaSquareBox;
+    setAllCaptchaSquareBoxs(updatedBoxes);
+  };
+
+  const handleSectorsValidation = () => {};
+
   return (
     <>
       {!imgSrc && (
@@ -69,8 +80,13 @@ function App() {
       )}
 
       {imgSrc && (
-        <CaptchaContainer handleFunction={handlePreValidationImgPosition} title={`Select ${shapeNameToValidate}`} action="Validate">
-          <CaptchaSectorsValidation imgSrc={imgSrc} squareShapePosition={squareShapePosition} allCaptchaSquareBoxs={allCaptchaSquareBoxs} />
+        <CaptchaContainer handleFunction={handleSectorsValidation} title={`Select ${shapeNameToValidate}`} action="Validate">
+          <CaptchaSectorsValidation
+            imgSrc={imgSrc}
+            squareShapePosition={squareShapePosition}
+            allCaptchaSquareBoxs={allCaptchaSquareBoxs}
+            handleSelectedWatermarks={handleSelectedWatermarks}
+          />
         </CaptchaContainer>
       )}
     </>
