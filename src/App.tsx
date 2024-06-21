@@ -6,7 +6,7 @@ import { CaptchaSquareBoxSize, usedIndexes, VideoCamDefaultHeight, VideoCamDefau
 import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
 import CaptchaContainer from "./components/CaptchaContainer";
 import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
-import SuccessShowing from "./components/SuccessShowing";
+import Swal from "sweetalert2";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -107,6 +107,25 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (validateSuccess?.success && validateSuccess?.message) {
+      Swal.fire({
+        title: "Success!",
+        text: validateSuccess?.message,
+        icon: "success",
+        confirmButtonText: "Thank you",
+      });
+    }
+    if (!validateSuccess?.success && validateSuccess?.message) {
+      Swal.fire({
+        title: "Error!",
+        text: validateSuccess?.message,
+        icon: "error",
+        confirmButtonText: "Try Again!",
+      });
+    }
+  }, [validateSuccess]);
+
   return (
     <>
       {!imgSrc && !validateSuccess && (
@@ -125,8 +144,6 @@ function App() {
           />
         </CaptchaContainer>
       )}
-
-      {validateSuccess?.success ? <SuccessShowing title="Success" /> : <SuccessShowing title="Error" />}
     </>
   );
 }
