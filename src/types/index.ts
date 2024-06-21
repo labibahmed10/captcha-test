@@ -34,3 +34,8 @@ export interface ICaptchaSectorsValidationProps {
   squareShapePosition: ISquareShapePosition;
   handleSelectedWatermarks: (val: ICaptchaSquareBox) => void;
 }
+
+export interface IValidationSuccessType {
+  success: boolean;
+  message: string;
+}
