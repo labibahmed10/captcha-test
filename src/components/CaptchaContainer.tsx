@@ -1,6 +1,6 @@
-import { ICaptchaContainerTypes } from "../types";
+import { ICaptchaContainerProps } from "../types";
 
-const CaptchaContainer = ({ handleFunction, title, action, children }: ICaptchaContainerTypes) => {
+const CaptchaContainer = ({ handleFunction, title, action, children }: ICaptchaContainerProps) => {
   return (
     <section className="flex items-center justify-center h-screen bg-[#03285D]">
       <div className="py-[2rem] px-[5rem] bg-slate-50 flex flex-col items-center justify-center gap-8">

@@ -5,6 +5,7 @@ import { ICaptchaSquareBox, ISquareShapePosition } from "./types";
 import { CaptchaSquareBoxSize, usedIndexes, VideoCamDefaultHeight, VideoCamDefaultWidth, waterMarksShapes } from "./utils/constValues";
 import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
 import CaptchaContainer from "./components/CaptchaContainer";
+import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -58,13 +59,17 @@ function App() {
 
   return (
     <>
-      <CaptchaContainer handleFunction={handlePreValidationImgPosition} title="Take Selfie" action="Continue">
-        {imgSrc ? (
-          <img src={imgSrc ? imgSrc : ""} alt="" />
-        ) : (
+      {!imgSrc && (
+        <CaptchaContainer handleFunction={handlePreValidationImgPosition} title="Take Selfie" action="Continue">
           <CaptchaWebCamContainer ref={webcamRef} allCaptchaSquareBoxs={allCaptchaSquareBoxs} squareShapePosition={squareShapePosition} />
-        )}
-      </CaptchaContainer>
+        </CaptchaContainer>
+      )}
+
+      {imgSrc && (
+        <CaptchaContainer handleFunction={handlePreValidationImgPosition} title={`Select SHAPENAME`} action="Validate">
+          <CaptchaSectorsValidation imgSrc={imgSrc} squareShapePosition={squareShapePosition} allCaptchaSquareBoxs={allCaptchaSquareBoxs} />
+        </CaptchaContainer>
+      )}
     </>
   );
 }

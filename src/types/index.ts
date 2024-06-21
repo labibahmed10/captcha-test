@@ -14,15 +14,21 @@ export interface ICaptchaSquareBox {
   waterMarkType?: string;
 }
 
-export interface ICaptchaContainerTypes {
+export interface ICaptchaContainerProps {
   handleFunction: () => void;
   title: string;
   action: string;
   children: ReactNode;
 }
 
-export interface CaptchaWebCamContainerProps {
+export interface ICaptchaWebCamContainerProps {
   ref: RefObject<Webcam>;
+  allCaptchaSquareBoxs: ICaptchaSquareBox[] | undefined;
+  squareShapePosition: ISquareShapePosition;
+}
+
+export interface ICaptchaSectorsValidationProps {
+  imgSrc: string;
   allCaptchaSquareBoxs: ICaptchaSquareBox[] | undefined;
   squareShapePosition: ISquareShapePosition;
 }

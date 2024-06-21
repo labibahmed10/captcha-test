@@ -1,10 +1,10 @@
 import { forwardRef, RefObject } from "react";
 import Webcam from "react-webcam";
-import { CaptchaWebCamContainerProps } from "../types";
+import { ICaptchaWebCamContainerProps } from "../types";
 import { CaptchaSquareBoxSize } from "../utils/constValues";
 
 // Using forwardRef to properly handle the ref value
-const CaptchaWebCamContainer = forwardRef<Webcam, CaptchaWebCamContainerProps>((props, ref) => {
+const CaptchaWebCamContainer = forwardRef<Webcam, ICaptchaWebCamContainerProps>((props, ref) => {
   const { allCaptchaSquareBoxs, squareShapePosition } = props;
 
   return (
