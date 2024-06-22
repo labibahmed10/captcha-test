@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { getUniqueRandomIndex } from "./helper/getUniqueRandomIndex";
-import { ICaptchaSquareBox, ISquareShapePosition, IValidationSuccessType } from "./types";
+import { ICaptchaSquareBox, ISquareShapePosition } from "./types";
 import { CaptchaSquareBoxSize, usedIndexes, VideoCamDefaultHeight, VideoCamDefaultWidth, waterMarksShapes } from "./utils/constValues";
-import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
 import CaptchaContainer from "./components/CaptchaContainer";
 import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
-import Swal from "sweetalert2";
+import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
+import showMessages from "./helper/showMessage";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -15,7 +15,6 @@ function App() {
   const [shapeNameToValidate, setShapeNameToValidate] = useState<string>("");
   const [squareShapePosition, setSquareShapePosition] = useState<ISquareShapePosition>({ x: 0, y: 0 });
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[]>([]);
-  const [validateSuccess, setValidateSuccess] = useState<IValidationSuccessType>();
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -78,63 +77,38 @@ function App() {
     // as user will select the watermark boxs those values are filtered here
     const userSelectedCaptchaSquareBoxs = allCaptchaSquareBoxs.filter((captchaMiniBox) => captchaMiniBox.isClicked);
 
-    // if there is box selected than no length, set -> false, message
-    if (userSelectedCaptchaSquareBoxs.length <= 0) {
-      setValidateSuccess({
-        success: false,
-        message: "Please select Shape name box's to validate captcha",
-      });
-    }
-
     // user selected 1/1+ captcha boxes, are every boxs are the same name of Shapename? -> true | false
     const isSelectedAreWaterMarks = userSelectedCaptchaSquareBoxs.every((captchaMiniBox) => captchaMiniBox.waterMarkType === shapeNameToValidate);
+
+    // if there is box selected than no length, set -> false, message
+    if (userSelectedCaptchaSquareBoxs.length === 0) {
+      return showMessages(false, `Please select ${shapeNameToValidate} box's to validate captcha`);
+    }
 
     // if user selected and whatever boxs are, same name as Shape!?
     if (userSelectedCaptchaSquareBoxs.length > 0 && isSelectedAreWaterMarks) {
       // if same name as Shapename and the length of all boxes are same -> true
       if (userSelectedCaptchaSquareBoxs.length === allSelectedCaptchaSquareBoxs.length) {
-        setValidateSuccess({
-          success: true,
-          message: "Validation was successful",
-        });
+        return showMessages(true, "Validation was successful");
+      } else {
+        // if no conditions meet the requirements then -> false
+        return showMessages(false, "Invalid selection was selected in the captcha box");
       }
     } else {
       // if no conditions meet the requirements then -> false
-      setValidateSuccess({
-        success: false,
-        message: "Invalid selection was selected in the captcha box",
-      });
+      return showMessages(false, "Invalid selection was selected in the captcha box");
     }
   };
 
-  useEffect(() => {
-    if (validateSuccess?.success && validateSuccess?.message) {
-      Swal.fire({
-        title: "Success!",
-        text: validateSuccess?.message,
-        icon: "success",
-        confirmButtonText: "Thank you",
-      });
-    }
-    if (!validateSuccess?.success && validateSuccess?.message) {
-      Swal.fire({
-        title: "Error!",
-        text: validateSuccess?.message,
-        icon: "error",
-        confirmButtonText: "Try Again!",
-      });
-    }
-  }, [validateSuccess]);
-
   return (
     <>
-      {!imgSrc && !validateSuccess && (
+      {!imgSrc && (
         <CaptchaContainer handleFunction={handlePreValidationImgPosition} title="Take Selfie" action="Continue">
           <CaptchaWebCamContainer ref={webcamRef} allCaptchaSquareBoxs={allCaptchaSquareBoxs} squareShapePosition={squareShapePosition} />
         </CaptchaContainer>
       )}
 
-      {imgSrc && !validateSuccess && (
+      {imgSrc && (
         <CaptchaContainer handleFunction={handleSectorsValidation} title={`Select ${shapeNameToValidate}`} action="Validate">
           <CaptchaSectorsValidation
             imgSrc={imgSrc}
