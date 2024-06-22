@@ -13,6 +13,7 @@ export interface ICaptchaSquareBox {
   width: number;
   height: number;
   waterMarkType?: string;
+  color?: string;
 }
 
 export interface ICaptchaContainerProps {

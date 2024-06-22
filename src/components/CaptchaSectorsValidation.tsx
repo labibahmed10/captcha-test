@@ -27,22 +27,32 @@ const CaptchaSectorsValidation = ({
             return (
               <div
                 className={`p-0 m-0 border-[0.3px] bg-slate-400/20 z-10 flex items-center justify-center cursor-pointer ${
-                  box.hasWaterMark ? "hover:bg-[#03285D] " : ""
+                  box.hasWaterMark ? "hover:bg-[#fafafa] " : ""
                 }`}
                 key={i}
                 style={{
                   width: `${box?.width}px`,
                   height: `${box?.height}px`,
-                  backgroundColor: box.isClicked ? "#03285D" : "",
+                  backgroundColor: box.isClicked ? "#fafafa" : "",
                 }}
                 onClick={() => handleSelectedWatermarks(box)}
               >
                 {box.waterMarkType === "triangle" ? (
-                  <div className="custom-triangle" />
+                  <div
+                    style={{
+                      // dynamic value for triangle wasn't working, that's why changed into custom style
+                      borderColor: box.color ? box.color : "",
+                      borderBottomWidth: "30px",
+                      borderLeftWidth: "15px",
+                      borderRightWidth: "15px",
+                      borderLeftColor: "transparent",
+                      borderRightColor: "transparent",
+                    }}
+                  />
                 ) : box.waterMarkType === "circle" ? (
-                  <div className="custom-circle" />
+                  <div className="custom-circle" style={{ borderColor: box.color ? box.color : "" }} />
                 ) : (
-                  box.waterMarkType === "square" && <div className="custom-square" />
+                  box.waterMarkType === "square" && <div className="custom-square" style={{ borderColor: box.color ? box.color : "" }} />
                 )}
               </div>
             );

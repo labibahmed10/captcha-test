@@ -5,8 +5,12 @@ const CaptchaSquareBoxSize = 200;
 
 // pre defined shapes for watermarks
 const waterMarksShapes = ["triangle", "circle", "square"];
+// random color with watermarks
+export const randomColors = ["red", "green", "blue"];
 
-export { VideoCamDefaultHeight, VideoCamDefaultWidth, CaptchaSquareBoxSize, waterMarksShapes };
 
 // Set to keep track of used indexes
 export const usedIndexes = new Set<number>();
+
+
+export { VideoCamDefaultHeight, VideoCamDefaultWidth, CaptchaSquareBoxSize, waterMarksShapes };

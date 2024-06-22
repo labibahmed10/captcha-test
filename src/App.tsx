@@ -8,6 +8,7 @@ import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
 import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
 import showMessages from "./helper/showMessage";
 import { startInterval } from "./helper/startInterval";
+import { generateRandomColorForRandomShapeName } from "./helper/generateRandomColorForRandomShapeName";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -52,9 +53,16 @@ function App() {
       captchaMiniBoxs[randomIndexForWatermarkPlacement].hasWaterMark = true;
     }
 
-    const randomWatermarkShapeName = waterMarksShapes[Math.floor(Math.random() * 3)];
-    setShapeNameToValidate(randomWatermarkShapeName);
+    const randomWatermarkShapeName = waterMarksShapes[Math.floor(Math.random() * 3)]; // triangle | circle | square any of this shape will generate
+
+    // here generating random color with various shapename
+    const afterRandomColorAddingUpdatedBoxs = generateRandomColorForRandomShapeName();
+
+    // here I'm using the color for the watermark shape randomly
+    captchaMiniBoxs.forEach((box) => (box.color = afterRandomColorAddingUpdatedBoxs[box["waterMarkType"]!]));
+
     setAllCaptchaSquareBoxs(captchaMiniBoxs);
+    setShapeNameToValidate(randomWatermarkShapeName);
   };
 
   const handleSelectedWatermarks = (box: ICaptchaSquareBox) => {

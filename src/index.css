@@ -9,10 +9,6 @@
 }
 
 @layer utilities {
-  .custom-triangle {
-    @apply border-x-[15px] border-x-transparent border-b-[30px];
-  }
-
   .custom-circle {
     @apply rounded-full border-[15px];
   }
