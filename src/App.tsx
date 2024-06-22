@@ -95,7 +95,7 @@ function App() {
       }
     } else {
       // if no conditions meet the requirements then -> false
-      return showMessages(false, "Invalid selection was selected in the captcha box!");
+      return showMessages(false, "Invalid selection in the captcha box!");
     }
   };
 
@@ -108,7 +108,7 @@ function App() {
       )}
 
       {imgSrc && (
-        <CaptchaContainer handleFunction={handleSectorsValidation} title={`Select ${shapeNameToValidate}`} action="Validate">
+        <CaptchaContainer handleFunction={handleSectorsValidation} title={`Select '${shapeNameToValidate}'`} action="Validate">
           <CaptchaSectorsValidation
             imgSrc={imgSrc}
             squareShapePosition={squareShapePosition}
