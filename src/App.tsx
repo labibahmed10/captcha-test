@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { getUniqueRandomIndex } from "./helper/getUniqueRandomIndex";
 import { ICaptchaSquareBox, ISquareShapePosition } from "./types";
-import { CaptchaSquareBoxSize, usedIndexes, waterMarksShapes } from "./utils/constValues";
+import { CaptchaSquareBoxSize,  waterMarksShapes } from "./utils/constValues";
 import CaptchaContainer from "./components/CaptchaContainer";
 import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
 import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
@@ -47,7 +47,7 @@ function App() {
     const halfOfTheRandomAreaForRandomWatermarkPlace = Math.floor((rows * cols) / 2); // 12/25 box area
 
     for (let i = 0; i < halfOfTheRandomAreaForRandomWatermarkPlace; i++) {
-      const randomIndexForWatermarkPlacement = getUniqueRandomIndex(usedIndexes);
+      const randomIndexForWatermarkPlacement = getUniqueRandomIndex();
       const waterMarkType = waterMarksShapes[Math.floor(Math.random() * 3)]; // triangle | circle | square
       captchaMiniBoxs[randomIndexForWatermarkPlacement].waterMarkType = waterMarkType;
       captchaMiniBoxs[randomIndexForWatermarkPlacement].hasWaterMark = true;

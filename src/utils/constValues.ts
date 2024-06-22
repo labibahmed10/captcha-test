@@ -8,9 +8,4 @@ const waterMarksShapes = ["triangle", "circle", "square"];
 // random color with watermarks
 export const randomColors = ["red", "green", "blue"];
 
-
-// Set to keep track of used indexes
-export const usedIndexes = new Set<number>();
-
-
 export { VideoCamDefaultHeight, VideoCamDefaultWidth, CaptchaSquareBoxSize, waterMarksShapes };
