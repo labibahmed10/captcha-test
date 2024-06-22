@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { getUniqueRandomIndex } from "./helper/getUniqueRandomIndex";
 import { ICaptchaSquareBox, ISquareShapePosition } from "./types";
-import { CaptchaSquareBoxSize, usedIndexes, VideoCamDefaultHeight, VideoCamDefaultWidth, waterMarksShapes } from "./utils/constValues";
+import { CaptchaSquareBoxSize, usedIndexes, waterMarksShapes } from "./utils/constValues";
 import CaptchaContainer from "./components/CaptchaContainer";
 import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
 import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
 import showMessages from "./helper/showMessage";
+import { startInterval } from "./helper/startInterval";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -17,13 +18,7 @@ function App() {
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[]>([]);
 
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setSquareShapePosition({
-        x: Math.floor(Math.random() * (VideoCamDefaultWidth - CaptchaSquareBoxSize)),
-        y: Math.floor(Math.random() * (VideoCamDefaultHeight - CaptchaSquareBoxSize)),
-      });
-    }, 1500);
-
+    intervalRef.current = startInterval(setSquareShapePosition);
     return () => clearInterval(intervalRef.current);
   }, []);
 
@@ -89,6 +84,10 @@ function App() {
     if (userSelectedCaptchaSquareBoxs.length > 0 && isSelectedAreWaterMarks) {
       // if same name as Shapename and the length of all boxes are same -> true
       if (userSelectedCaptchaSquareBoxs.length === allSelectedCaptchaSquareBoxs.length) {
+        setImageSrc(null);
+        setAllCaptchaSquareBoxs([]);
+        setShapeNameToValidate("");
+        intervalRef.current = startInterval(setSquareShapePosition);
         return showMessages(true, "Validation was successful");
       } else {
         // if no conditions meet the requirements then -> false
