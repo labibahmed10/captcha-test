@@ -60,7 +60,7 @@ function App() {
   const handleSelectedWatermarks = (box: ICaptchaSquareBox) => {
     const updatedBoxes = [...allCaptchaSquareBoxs];
     const selectedWatermarks = allCaptchaSquareBoxs?.find((captchaMiniBox) => captchaMiniBox.position === box.position);
-    selectedWatermarks!.isClicked = !selectedWatermarks!.isClicked; // depending click, will toggle the isClicked flag
+    selectedWatermarks!.isClicked = !selectedWatermarks!.isClicked; // depending on click, will toggle the isClicked flag
     updatedBoxes[box.position] = selectedWatermarks as ICaptchaSquareBox;
     setAllCaptchaSquareBoxs(updatedBoxes);
   };
