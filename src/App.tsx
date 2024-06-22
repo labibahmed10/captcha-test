@@ -77,7 +77,7 @@ function App() {
 
     // if there is box selected than no length, set -> false, message
     if (userSelectedCaptchaSquareBoxs.length === 0) {
-      return showMessages(false, `Please select ${shapeNameToValidate} box's to validate captcha`);
+      return showMessages(false, `Please select ${shapeNameToValidate} box's to validate captcha!`);
     }
 
     // if user selected and whatever boxs are, same name as Shape!?
@@ -91,11 +91,11 @@ function App() {
         return showMessages(true, "Validation was successful");
       } else {
         // if no conditions meet the requirements then -> false
-        return showMessages(false, "Invalid selection was selected in the captcha box");
+        return showMessages(false, "You probably have not selected required boxs!");
       }
     } else {
       // if no conditions meet the requirements then -> false
-      return showMessages(false, "Invalid selection was selected in the captcha box");
+      return showMessages(false, "Invalid selection was selected in the captcha box!");
     }
   };
 
