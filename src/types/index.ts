@@ -21,6 +21,8 @@ export interface ICaptchaContainerProps {
   title: string;
   action: string;
   children: ReactNode;
+  imgSrc?: string;
+  numOfWrongValidation?: number;
 }
 
 export interface ICaptchaWebCamContainerProps {

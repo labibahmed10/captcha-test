@@ -17,6 +17,7 @@ function App() {
   const [shapeNameAndColorValidate, setShapeNameAndColorValidate] = useState<IShapeName_Color | undefined>();
   const [squareShapePosition, setSquareShapePosition] = useState<ISquareShapePosition>({ x: 0, y: 0 });
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[]>([]);
+  const [numOfWrongValidation, setNumOfWrongValidation] = useState<number>(0);
 
   useEffect(() => {
     intervalRef.current = startInterval(setSquareShapePosition);
@@ -89,6 +90,7 @@ function App() {
 
     //* if there is box selected than no length, set -> false, message
     if (userSelectedCaptchaSquareBoxs.length === 0) {
+      setNumOfWrongValidation((prev) => prev + 1);
       return showMessages(
         false,
         `Please select ${shapeNameAndColorValidate?.randomWatermarkShapeName} & ${shapeNameAndColorValidate?.colorTint} box's to validate captcha!`
@@ -103,13 +105,16 @@ function App() {
         setAllCaptchaSquareBoxs([]);
         setShapeNameAndColorValidate(undefined);
         intervalRef.current = startInterval(setSquareShapePosition);
+        setNumOfWrongValidation(0);
         return showMessages(true, "Validation was successful");
       } else {
         //* if no conditions meet the requirements then -> false
+        setNumOfWrongValidation((prev) => prev + 1);
         return showMessages(false, "You probably have not selected required boxs!");
       }
     } else {
       //* if no conditions meet the requirements then -> false
+      setNumOfWrongValidation((prev) => prev + 1);
       return showMessages(false, "Invalid selection in the captcha box!");
     }
   };
@@ -125,8 +130,10 @@ function App() {
       {imgSrc && (
         <CaptchaContainer
           handleFunction={handleSectorsValidation}
-          title={`Select '${shapeNameAndColorValidate?.randomWatermarkShapeName} & ${shapeNameAndColorValidate?.colorTint} box's'`}
+          title={`Select '${shapeNameAndColorValidate?.randomWatermarkShapeName} - ${shapeNameAndColorValidate?.colorTint} box's'`}
           action="Validate"
+          imgSrc={imgSrc}
+          numOfWrongValidation={numOfWrongValidation}
         >
           <CaptchaSectorsValidation
             imgSrc={imgSrc}
