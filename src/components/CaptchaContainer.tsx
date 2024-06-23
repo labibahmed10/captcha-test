@@ -14,9 +14,8 @@ const CaptchaContainer = ({ handleFunction, title, action, children, imgSrc, num
         {imgSrc && <p className="text-xl font-serif text-blue-600/90">N.B -After 5 times wrong validation approach you will be blocked</p>}
 
         <button
-          disabled={numOfWrongValidation! >= 5}
           onClick={handleFunction}
-          className="bg-[#FF8E20] px-12 py-2 text-lg font-semibold text-white uppercase leading-2 rounded-md hover:bg-[#ff8420] active:scale-[0.88] active:transition-all duration-500 disabled:bg-[#5f4326] disabled:active:scale-[1] disabled:active:transition-none disabled:duration-0"
+          className="bg-[#FF8E20] px-10 py-2 text-lg font-semibold text-white uppercase leading-2 rounded-md hover:bg-[#ff8420] active:scale-[0.88] active:transition-all duration-500 "
         >
           {action}
         </button>
