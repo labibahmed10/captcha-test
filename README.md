@@ -1,30 +1,28 @@
-# React + TypeScript + Vite
+# React Captcha Webcam Validation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project implements a unique captcha validation system using React and webcam functionality. Users are required to take a selfie and then identify specific shapes and colors within the captured image to pass the captcha.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Before you begin, ensure you have met the following requirements:
 
-## Expanding the ESLint configuration
+- Node.js (version 12.0 or higher recommended)
+- npm (usually comes with Node.js)
+- A modern web browser with webcam support
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Installation
 
-- Configure the top-level `parserOptions` property like this:
+To install the project, follow these steps:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+1. Clone the repository: https://github.com/labibahmed10/captcha-test.git
+2. Navigate to the project directory: `cd captcha-test/`
+3. Install the dependencies: `npm install`
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Usage
+
+To run the project locally:
+
+1. Start the development server: `npm run dev`
+2. Open your web browser and navigate to `http://localhost:3000`
+3. Allow camera access when prompted by your browser
+4. Follow the on-screen instructions to complete the captcha
