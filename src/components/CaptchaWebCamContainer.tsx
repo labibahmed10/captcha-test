@@ -8,15 +8,11 @@ import { CaptchaSquareBoxSize } from "../utils/constValues";
 const CaptchaWebCamContainer = forwardRef<Webcam, ICaptchaWebCamContainerProps>((props, ref) => {
   const { allCaptchaSquareBoxs, squareShapePosition } = props;
 
-  const handleUserMediaError = (error: any) => {
-    console.log("Webcam error:", error);
-  };
-
   return (
     <>
       <Webcam
         audio={false}
-        // disablePictureInPicture={true}
+        disablePictureInPicture={true}
         height={480}
         screenshotFormat="image/jpeg"
         width={720}

@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { IBlockedErrorProps } from "../types";
-import useBlockCountdown from "../helper/useBlockCountdown";
+import useBlockCountdown from "../hooks/useBlockCountdown";
 
 const BlockedError = forwardRef<number | undefined, IBlockedErrorProps>((props, ref) => {
   const { secondsLeft, minuteLeft, handleReset } = useBlockCountdown({ props, ref });

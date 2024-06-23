@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { getUniqueRandomIndex } from "./helper/getUniqueRandomIndex";
@@ -10,6 +11,7 @@ import showMessages from "./helper/showMessage";
 import { startInterval } from "./helper/startInterval";
 import { generateRandomColorForRandomShapeName } from "./helper/generateRandomColorForRandomShapeName";
 import BlockedError from "./components/BlockedError";
+import useCameraPermission from "./hooks/useCameraPermission";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -22,58 +24,13 @@ function App() {
     localStorage.getItem("numOfWrongValidation") ? JSON.parse(localStorage.getItem("numOfWrongValidation")!) : 0
   );
 
-  // useEffect(() => {
-  //   async function getDevices() {
-  //     const devices = await navigator.mediaDevices.enumerateDevices();
-  //     console.log({ devices });
-  //   }
-  //   getDevices();
-  //   async function name() {
-  //     // const stream = await navigator.mediaDevices.getUserMedia({
-  //     //   video: true,
-  //     // });
+  // here getting the permission for camera access of your browser, if its not permitted
+  useCameraPermission();
 
-  //     // console.log(stream);
-  //     try {
-  //       const stream = await navigator.mediaDevices.getUserMedia({
-  //         video: {
-  //           width: {
-  //             min: 1280,
-  //             ideal: 1920,
-  //             max: 2560,
-  //           },
-  //           height: {
-  //             min: 720,
-  //             ideal: 1080,
-  //             max: 1440,
-  //           },
-  //           facingMode: "environment",
-  //         },
-  //       });
-  //       console.log({ stream });
-  //       // if (stream) {
-  //       //   // videoEle.current.srcObject = stream;
-  //       // }
-  //     } catch (err) {
-  //       console.log(err);
-  //       navigator.permissions.query({ name: "camera" }).then((res) => {
-  //         console.log(res);
-  //         // if (res.state === "granted") {
-  //         //   numOfWrongValidation <= 5 && window.location.reload();
-  //         // }
-  //         // else {
-  //         //   setCameraPermission(false);
-  //         // }
-  //       });
-  //     }
-  //   }
-  //   name();
-  // }, []);
-
-  // useEffect(() => {
-  //   intervalRef.current = startInterval(setSquareShapePosition);
-  //   return () => clearInterval(intervalRef.current);
-  // }, []);
+  useEffect(() => {
+    intervalRef.current = startInterval(setSquareShapePosition);
+    return () => clearInterval(intervalRef.current);
+  }, []);
 
   const handlePreValidationImgPosition = () => {
     if (webcamRef.current) {
