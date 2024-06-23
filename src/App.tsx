@@ -18,7 +18,9 @@ function App() {
   const [shapeNameAndColorValidate, setShapeNameAndColorValidate] = useState<IShapeName_Color | undefined>();
   const [squareShapePosition, setSquareShapePosition] = useState<ISquareShapePosition>({ x: 0, y: 0 });
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[]>([]);
-  const [numOfWrongValidation, setNumOfWrongValidation] = useState<number>(0);
+  const [numOfWrongValidation, setNumOfWrongValidation] = useState<number>(
+    localStorage.getItem("numOfWrongValidation") ? JSON.parse(localStorage.getItem("numOfWrongValidation")!) : 0
+  );
 
   useEffect(() => {
     intervalRef.current = startInterval(setSquareShapePosition);
@@ -91,6 +93,7 @@ function App() {
 
     //* if there is box selected than no length, set -> false, message
     if (userSelectedCaptchaSquareBoxs.length === 0) {
+      localStorage.setItem("numOfWrongValidation", String(numOfWrongValidation + 1));
       setNumOfWrongValidation((prev) => prev + 1);
       return showMessages(
         false,
@@ -106,15 +109,18 @@ function App() {
         setAllCaptchaSquareBoxs([]);
         setShapeNameAndColorValidate(undefined);
         intervalRef.current = startInterval(setSquareShapePosition);
+        localStorage.setItem("numOfWrongValidation", String(0));
         setNumOfWrongValidation(0);
         return showMessages(true, "Validation was successful");
       } else {
         //* if no conditions meet the requirements then -> false
+        localStorage.setItem("numOfWrongValidation", String(numOfWrongValidation + 1));
         setNumOfWrongValidation((prev) => prev + 1);
         return showMessages(false, "You probably have not selected required boxs!");
       }
     } else {
       //* if no conditions meet the requirements then -> false
+      localStorage.setItem("numOfWrongValidation", String(numOfWrongValidation + 1));
       setNumOfWrongValidation((prev) => prev + 1);
       return showMessages(false, "Invalid selection in the captcha box!");
     }
