@@ -2,7 +2,7 @@ import { ICaptchaContainerProps } from "../types";
 
 const CaptchaContainer = ({ handleFunction, title, action, children, imgSrc, numOfWrongValidation }: ICaptchaContainerProps) => {
   return (
-    <section className="flex items-center justify-center h-screen bg-[#03285D] rounded-lg">
+    <section className="flex items-center justify-center h-screen bg-[#03285D]">
       <div className="py-[2rem] px-[5rem] bg-slate-50 flex flex-col items-center justify-center gap-4 rounded-lg">
         <h1 className="text-4xl text-blue-600/80 capitalize font-serif">{title}</h1>
 

@@ -10,7 +10,7 @@ const BlockedError = forwardRef<number | undefined, IBlockedErrorProps>((props, 
   };
 
   return (
-    <section className="flex items-center justify-center h-screen bg-[#03285D] rounded-lg">
+    <section className="flex items-center justify-center h-screen bg-[#03285D]">
       <div className="bg-slate-50 h-[50%] w-[60%] flex items-center justify-center flex-col gap-5 rounded-md">
         <h1 className="text-3xl text-blue-600/90 font-serif">
           You're blocked for {formatTime(minuteLeft)} miniute {formatTime(secondsLeft)} seconds

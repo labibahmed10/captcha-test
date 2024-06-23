@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { forwardRef, RefObject } from "react";
 import Webcam from "react-webcam";
 import { ICaptchaWebCamContainerProps } from "../types";
@@ -7,14 +8,22 @@ import { CaptchaSquareBoxSize } from "../utils/constValues";
 const CaptchaWebCamContainer = forwardRef<Webcam, ICaptchaWebCamContainerProps>((props, ref) => {
   const { allCaptchaSquareBoxs, squareShapePosition } = props;
 
+  const handleUserMediaError = (error: any) => {
+    console.log("Webcam error:", error);
+  };
+
   return (
     <>
       <Webcam
         audio={false}
-        disablePictureInPicture={true}
+        // disablePictureInPicture={true}
+        height={480}
         screenshotFormat="image/jpeg"
+        width={720}
         videoConstraints={{ facingMode: "user" }}
         ref={ref} // webcam ref value attached here
+        onUserMediaError={(error: any) => console.log("Webcam error:", error)}
+        onUserMedia={() => console.log("Permission granted")}
       />
 
       {(ref as RefObject<Webcam>)?.current && allCaptchaSquareBoxs!.length <= 0 && (
