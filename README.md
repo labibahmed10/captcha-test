@@ -96,7 +96,7 @@ The project uses a combination of Tailwind CSS and custom styles. Key styling fe
 3. Random grid sectors are filled with colored shapes.
 4. User is instructed to select sectors with a specific shape and color.
 5. Selections are validated, and feedback is provided.
-6. After multiple failed attempts, the user is temporarily blocked.
+6. After multiple failed attempts, the user is temporarily blocked for one hour
 
 ## Dependencies
 
