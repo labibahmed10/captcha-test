@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { getUniqueRandomIndex } from "./helper/getUniqueRandomIndex";
-import { ICaptchaSquareBox, ISquareShapePosition } from "./types";
-import { CaptchaSquareBoxSize,  waterMarksShapes } from "./utils/constValues";
+import { ICaptchaSquareBox, IShapeName_Color, ISquareShapePosition } from "./types";
+import { CaptchaSquareBoxSize, waterMarksShapes } from "./utils/constValues";
 import CaptchaContainer from "./components/CaptchaContainer";
 import CaptchaSectorsValidation from "./components/CaptchaSectorsValidation";
 import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
@@ -14,7 +14,7 @@ function App() {
   const webcamRef = useRef<Webcam>(null);
   const intervalRef = useRef<number | undefined>();
   const [imgSrc, setImageSrc] = useState<string | null>(null);
-  const [shapeNameToValidate, setShapeNameToValidate] = useState<string>("");
+  const [shapeNameAndColorValidate, setShapeNameAndColorValidate] = useState<IShapeName_Color | undefined>();
   const [squareShapePosition, setSquareShapePosition] = useState<ISquareShapePosition>({ x: 0, y: 0 });
   const [allCaptchaSquareBoxs, setAllCaptchaSquareBoxs] = useState<ICaptchaSquareBox[]>([]);
 
@@ -55,14 +55,14 @@ function App() {
 
     const randomWatermarkShapeName = waterMarksShapes[Math.floor(Math.random() * 3)]; // triangle | circle | square any of this shape will generate
 
-    // here generating random color with various shapename
-    const afterRandomColorAddingUpdatedBoxs = generateRandomColorForRandomShapeName();
+    //* here generating random color for watermark shapes and getting the tint color for validation
+    const { updatedBoxsWithColorTint, colorTint } = generateRandomColorForRandomShapeName(captchaMiniBoxs);
+    setAllCaptchaSquareBoxs(updatedBoxsWithColorTint);
 
-    // here I'm using the color for the watermark shape randomly
-    captchaMiniBoxs.forEach((box) => (box.color = afterRandomColorAddingUpdatedBoxs[box["waterMarkType"]!]));
+    //* here I'm using the color for the watermark shape randomly | it was the first approach
+    // captchaMiniBoxs.forEach((box) => (box.color = afterRandomColorAddingUpdatedBoxs[box["waterMarkType"]!]));
 
-    setAllCaptchaSquareBoxs(captchaMiniBoxs);
-    setShapeNameToValidate(randomWatermarkShapeName);
+    setShapeNameAndColorValidate({ randomWatermarkShapeName, colorTint });
   };
 
   const handleSelectedWatermarks = (box: ICaptchaSquareBox) => {
@@ -74,35 +74,42 @@ function App() {
   };
 
   const handleSectorsValidation = () => {
-    // depending on random shapename it will filtered every value that has corresponding Shapename
-    const allSelectedCaptchaSquareBoxs = allCaptchaSquareBoxs.filter((captchaMiniBox) => captchaMiniBox.waterMarkType === shapeNameToValidate);
+    //* depending on random shapename it will filtered every value that has corresponding Shapename
+    const allSelectedCaptchaSquareBoxs = allCaptchaSquareBoxs.filter(
+      (captchaMiniBox) => captchaMiniBox.waterMarkType === shapeNameAndColorValidate?.randomWatermarkShapeName
+    );
 
-    // as user will select the watermark boxs those values are filtered here
+    //* as user will select the watermark boxs those values are filtered here
     const userSelectedCaptchaSquareBoxs = allCaptchaSquareBoxs.filter((captchaMiniBox) => captchaMiniBox.isClicked);
 
-    // user selected 1/1+ captcha boxes, are every boxs are the same name of Shapename? -> true | false
-    const isSelectedAreWaterMarks = userSelectedCaptchaSquareBoxs.every((captchaMiniBox) => captchaMiniBox.waterMarkType === shapeNameToValidate);
+    //* user selected 1/1+ captcha boxes, are every boxs are the same name of Shapename? -> true | false
+    const isSelectedAreWaterMarks = userSelectedCaptchaSquareBoxs.every(
+      (captchaMiniBox) => captchaMiniBox.waterMarkType === shapeNameAndColorValidate?.randomWatermarkShapeName
+    );
 
-    // if there is box selected than no length, set -> false, message
+    //* if there is box selected than no length, set -> false, message
     if (userSelectedCaptchaSquareBoxs.length === 0) {
-      return showMessages(false, `Please select ${shapeNameToValidate} box's to validate captcha!`);
+      return showMessages(
+        false,
+        `Please select ${shapeNameAndColorValidate?.randomWatermarkShapeName} & ${shapeNameAndColorValidate?.colorTint} box's to validate captcha!`
+      );
     }
 
-    // if user selected and whatever boxs are, same name as Shape!?
+    //* if user selected and whatever boxs are, same name as Shape!?
     if (userSelectedCaptchaSquareBoxs.length > 0 && isSelectedAreWaterMarks) {
-      // if same name as Shapename and the length of all boxes are same -> true
+      //* if same name as Shapename and the length of all boxes are same -> true
       if (userSelectedCaptchaSquareBoxs.length === allSelectedCaptchaSquareBoxs.length) {
         setImageSrc(null);
         setAllCaptchaSquareBoxs([]);
-        setShapeNameToValidate("");
+        setShapeNameAndColorValidate(undefined);
         intervalRef.current = startInterval(setSquareShapePosition);
         return showMessages(true, "Validation was successful");
       } else {
-        // if no conditions meet the requirements then -> false
+        //* if no conditions meet the requirements then -> false
         return showMessages(false, "You probably have not selected required boxs!");
       }
     } else {
-      // if no conditions meet the requirements then -> false
+      //* if no conditions meet the requirements then -> false
       return showMessages(false, "Invalid selection in the captcha box!");
     }
   };
@@ -116,7 +123,11 @@ function App() {
       )}
 
       {imgSrc && (
-        <CaptchaContainer handleFunction={handleSectorsValidation} title={`Select '${shapeNameToValidate}'`} action="Validate">
+        <CaptchaContainer
+          handleFunction={handleSectorsValidation}
+          title={`Select '${shapeNameAndColorValidate?.randomWatermarkShapeName} & ${shapeNameAndColorValidate?.colorTint} box's'`}
+          action="Validate"
+        >
           <CaptchaSectorsValidation
             imgSrc={imgSrc}
             squareShapePosition={squareShapePosition}

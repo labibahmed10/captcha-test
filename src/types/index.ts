@@ -40,3 +40,8 @@ export interface IValidationSuccessType {
   success: boolean;
   message: string;
 }
+
+export interface IShapeName_Color {
+  randomWatermarkShapeName: string;
+  colorTint: string;
+}
