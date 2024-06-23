@@ -9,6 +9,7 @@ import CaptchaWebCamContainer from "./components/CaptchaWebCamContainer";
 import showMessages from "./helper/showMessage";
 import { startInterval } from "./helper/startInterval";
 import { generateRandomColorForRandomShapeName } from "./helper/generateRandomColorForRandomShapeName";
+import BlockedError from "./components/BlockedError";
 
 function App() {
   const webcamRef = useRef<Webcam>(null);
@@ -121,13 +122,13 @@ function App() {
 
   return (
     <>
-      {!imgSrc && (
+      {!imgSrc && !(numOfWrongValidation >= 5) && (
         <CaptchaContainer handleFunction={handlePreValidationImgPosition} title="Take Selfie" action="Continue">
           <CaptchaWebCamContainer ref={webcamRef} allCaptchaSquareBoxs={allCaptchaSquareBoxs} squareShapePosition={squareShapePosition} />
         </CaptchaContainer>
       )}
 
-      {imgSrc && (
+      {imgSrc && !(numOfWrongValidation >= 5) && (
         <CaptchaContainer
           handleFunction={handleSectorsValidation}
           title={`Select '${shapeNameAndColorValidate?.randomWatermarkShapeName} - ${shapeNameAndColorValidate?.colorTint} box's'`}
@@ -142,6 +143,17 @@ function App() {
             handleSelectedWatermarks={handleSelectedWatermarks}
           />
         </CaptchaContainer>
+      )}
+
+      {numOfWrongValidation >= 5 && (
+        <BlockedError
+          setNumOfWrongValidation={setNumOfWrongValidation}
+          setImageSrc={setImageSrc}
+          setAllCaptchaSquareBoxs={setAllCaptchaSquareBoxs}
+          ref={intervalRef}
+          startInterval={startInterval}
+          setSquareShapePostion={setSquareShapePosition}
+        />
       )}
     </>
   );

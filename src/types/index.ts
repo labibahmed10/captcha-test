@@ -47,3 +47,11 @@ export interface IShapeName_Color {
   randomWatermarkShapeName: string;
   colorTint: string;
 }
+
+export interface IBlockedErrorProps {
+  setNumOfWrongValidation: React.Dispatch<React.SetStateAction<number>>;
+  setImageSrc: (val: string | null) => void;
+  startInterval: (setSquareShapePosition: React.Dispatch<React.SetStateAction<ISquareShapePosition>>) => number;
+  setSquareShapePostion: React.Dispatch<React.SetStateAction<ISquareShapePosition>>;
+  setAllCaptchaSquareBoxs: React.Dispatch<React.SetStateAction<ICaptchaSquareBox[]>>;
+}
